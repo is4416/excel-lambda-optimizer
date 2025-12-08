@@ -37,6 +37,14 @@ header {
 			text-decoration: underline;
 		}
 	}
+
+	> article {
+		position   : fixed;
+		top        : 5px;
+		left       : calc(100% - 1rem);
+		transform  : translate(-100%, 0);
+		white-space: nowrap;
+	}
 }
 
 main {
