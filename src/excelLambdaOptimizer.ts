@@ -238,7 +238,14 @@ export const lambdaOptimizer = (text: string, options: Partial <OptimizerOptions
 			const value = getFunctionValue(result, i)
 
 			const rule = rules.find(a => a.name === name)
-			if (!rule) continue
+			// if (!rule) continue
+			if (!rule) {
+				// 関数名は大文字に変換
+				result = result.slice(0, i - name.length)
+					+ name.toUpperCase()
+					+ result.slice(i)
+				continue
+			}
 
 			const args: string[] = splitArgs(value)
 			let isBreak = false
@@ -261,7 +268,7 @@ export const lambdaOptimizer = (text: string, options: Partial <OptimizerOptions
 				+ ")"
 			if (rule.name === "LAMBDA") isFirstLambda = false
 
-			const newName = name.toUpperCase() // 関数名は大文字に固定
+			const newName = name.toUpperCase() // 改行対象となった関数名は大文字に固定
 			result = result.slice(0, i - newName.length) + newName + newValue + result.slice(i + value.length)
 		}
 
