@@ -7,7 +7,7 @@
 //   ARange     : Range    断面積
 //   UniformSpan: Boolean  Prismoidal法で計算 (optional)
 //   Alpha      : Number   戸田式補正 (optional)
-// ): Number
+// ): HSTACK(Number, Number)
 // ---------- ---------- ---------- ---------- ----------
 
 SectionVolume = LAMBDA(SPRange, ARange, UniformSpan, Alpha, LET(
