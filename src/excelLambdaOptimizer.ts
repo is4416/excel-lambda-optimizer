@@ -295,6 +295,14 @@ export const lambdaOptimizer = (text: string, options: Partial <OptimizerOptions
 			for (let i = 0; i < S.length; i++) {
 				if (S[i] === "(") depth++
 				if (S[i] === ")") depth--
+
+				const nextC = "+-*/=!<>"
+
+				if (
+					i < S.length - 1 &&
+					S[i] === ")" &&
+					nextC.indexOf(S[i + 1]) !== -1
+				) depth++
 			}
 			return depth > 0
 		}
