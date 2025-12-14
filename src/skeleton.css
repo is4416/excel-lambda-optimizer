@@ -36,6 +36,10 @@ header {
 		> span:hover {
 			text-decoration: underline;
 		}
+
+		> p {
+			padding-top: 0.5rem;
+		}
 	}
 
 	> article {
