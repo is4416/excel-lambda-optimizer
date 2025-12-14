@@ -221,7 +221,7 @@ export const lambdaOptimizer = (text: string, options: Partial <OptimizerOptions
 		result = result.split(param.EOL).map(line => line.trim()).filter(Boolean).join("")
 
 		// 最初の LAMBDA まで削除
-		return "=" + result.slice(result.toUpperCase().indexOf("LAMBDA"))
+		return "=" + result.slice(result.toUpperCase().indexOf("LAMBDA")) + param.EOL
 	}
 	result = initializreText(result)
 
@@ -294,15 +294,7 @@ export const lambdaOptimizer = (text: string, options: Partial <OptimizerOptions
 			let depth = 0
 			for (let i = 0; i < S.length; i++) {
 				if (S[i] === "(") depth++
-				if (S[i] === ")") depth--
-
-				const nextC = "+-*/=!<>"
-
-				if (
-					i < S.length - 1 &&
-					S[i] === ")" &&
-					nextC.indexOf(S[i + 1]) !== -1
-				) depth++
+				if (S[i] === ")") depth = Math.max(0, depth - 1)
 			}
 			return depth > 0
 		}
