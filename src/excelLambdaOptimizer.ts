@@ -352,7 +352,7 @@ export const lambdaOptimizer = (text: string, options: Partial <OptimizerOptions
 		let   escape      = false
 		let   i           = 0
 
-		const controlChar = ' =+-*/,(){}' + param.EOL
+		const controlChar = ' =+-*/,(){}<>' + param.EOL
 
 		// 指定位置からcontrolCharまでの文字を返す
 		const getText = (index: number): string => {
@@ -402,7 +402,7 @@ export const lambdaOptimizer = (text: string, options: Partial <OptimizerOptions
 
 			if (C === '"') escape = !escape
 
-			// エスケープ処理は、Cをつむ
+			// エスケープ処理は、Cを積む
 			// 前の文字が制御記号でなければ、文字の途中なのでそのままCを積む
 			if (
 				escape ||

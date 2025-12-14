@@ -105,21 +105,21 @@ addEventListener("load", () => {
 		view: (state: State) => (<main id="app">
 			<section>
 				<textarea
-					id      = "code"
-					title   = "code"
+					id          = "code"
+					title       = "code"
 					placeholder = "code"
-					value   = { state.code }
-					wrap    = "off"
-					oninput = { action_inputText }
+					value       = { state.code }
+					wrap        = "off"
+					oninput     = { action_inputText }
 				/>
 			</section>
 			<section>
 				<textarea
-					id       = "formula"
-					title    = "formula"
+					id          = "formula"
+					title       = "formula"
 					placeholder = "formula"
-					value    = { state.code !== "" ? lambdaOptimizer(state.code, state.options) : "" }
-					readOnly = {true}
+					value       = { state.code !== "" ? lambdaOptimizer(state.code, state.options) : "" }
+					readOnly    = {true}
 				/>
 				<div id="param">
 					<label><input
