@@ -97,6 +97,7 @@ const splitArgs = (value: string): string[] => {
 export interface OptimizerOptions {
 	EOL            : string
 	indentSize     : number
+	wrapColumn     : number
 	spacingKeys    : {from: string, to: string}[]
 	argRules       : ArgData[]
 	skipFirstLAMBDA: boolean
@@ -124,6 +125,7 @@ export const lambdaOptimizer = (text: string, options: Partial <OptimizerOptions
 	const param: OptimizerOptions = {
 		EOL        : String.fromCharCode(10),
 		indentSize : 2,
+		wrapColumn : 35,
 		spacingKeys: [
 			{from: "=LAMBDA", to: "= LAMBDA"},
 			{from: "===",     to: " === "},
@@ -264,8 +266,11 @@ export const lambdaOptimizer = (text: string, options: Partial <OptimizerOptions
 					if (rule.name === "LAMBDA" && isFirstLambda) firstKeys.push(arg)
 				}
 
-				// 改行判定
-				if (rule.breakRule(index, args.length)) {
+				// 改行判定 // 文字数が少なければ改行しない
+				if (
+					rule.breakRule(index, args.length) &&
+					value.length > param.wrapColumn
+				) {
 					isBreak = true
 					return param.EOL + arg
 				} else {
