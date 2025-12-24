@@ -1,17 +1,51 @@
 // ---------- ---------- ---------- ---------- ----------
+// type Rule
+// ---------- ---------- ---------- ---------- ----------
+/**
+ * 引数の位置から判定を行うルール関数
+ * 
+ * @callback Rule
+ * 
+ * @param   {number} index    - 引数のインデックス
+ * @param   {number} maxCount - 引数の総数
+ * @returns {boolean}
+ */
+export type Rule = (index: number, maxCount: number) => boolean
+
+/* 基本ルール */
+export const rule_true        = (index: number, maxCount: number) => true
+export const rule_false       = (index: number, maxCount: number) => false
+export const rule_first_true  = (index: number, maxCount: number) => index === 0
+export const rule_first_false = (index: number, maxCount: number) => index !== 0
+export const rule_last_true   = (index: number, maxCount: number) => index === maxCount - 1
+export const rule_last_false  = (index: number, maxCount: number) => index !== maxCount - 1
+export const rule_even        = (index: number, maxCount: number) => index % 2 === 0
+export const rule_odd         = (index: number, maxCount: number) => index % 2 !== 0
+
+/* ルール合成 and */
+export const rule_and = (...rules: Rule[]): Rule =>
+	(index: number, maxCount: number) =>
+		rules.every(rule => rule(index, maxCount))
+
+/* ルール合成 or */
+export const rule_or = (...rules: Rule[]): Rule =>
+	(index: number, maxCount: number) =>
+		rules.some(rule => rule(index, maxCount))
+
+// ---------- ---------- ---------- ---------- ----------
 // interface ArgData
 // ---------- ---------- ---------- ---------- ----------
 /**
  * @type {Object} ArgData
  * 
- * @property {string | null}              name      - 関数名 | null
- * @property {(index: number) => boolean} breakRule - 改行ルール
- * @property {(index: number) => boolean} variable  - 変数
+ * @property {string} name      - 関数名
+ * @property {Rule}   breakRule - 改行ルール
+ * @property {Rule}   variable  - 変数判定
  */
-interface ArgData {
+export interface ArgData {
 	name     : string
-	breakRule: (index: number, maxCount: number) => boolean
-	variable : (index: number, maxCount: number) => boolean
+	breakRule: Rule
+	variable : Rule
 }
 
 // ---------- ---------- ---------- ---------- ----------
@@ -154,33 +188,38 @@ export const lambdaOptimizer = (text: string, options: Partial <OptimizerOptions
 		argRules: [
 			{
 				name     : "LAMBDA",
-				breakRule: (index: number, maxCount: number) => false,
-				variable : (index: number, maxCount: number) => index !== maxCount - 1
+				breakRule: rule_false,
+				variable : rule_last_false
 			},
 			{
 				name     : "LET",
-				breakRule: (index: number, maxCount: number) => index % 2 === 0,
-				variable : (index: number, maxCount: number) => index % 2 === 0 && index !== maxCount - 1
+				breakRule: rule_even,
+				variable : rule_and(rule_even, rule_last_false)
 			},
 			{
 				name     : "IF",
-				breakRule: (index: number, maxCount: number) => index > 0,
-				variable : (index: number, maxCount: number) => false
+				breakRule: rule_first_false,
+				variable : rule_false
 			},
 			{
 				name     : "MAP",
-				breakRule: (index: number, maxCount: number) => true,
-				variable : (index: number, maxCount: number) => false
+				breakRule: rule_true,
+				variable : rule_false
 			},
 			{
 				name     : "REDUCE",
-				breakRule: (index: number, maxCount: number) => true,
-				variable : (index: number, maxCount: number) => false
+				breakRule: rule_true,
+				variable : rule_false
 			},
 			{
 				name     : "HSTACK",
-				breakRule: (index: number) => true,
-				variable : (index: number) => false
+				breakRule: rule_true,
+				variable : rule_false
+			},
+			{
+				name     : "INDEX",
+				breakRule: rule_true,
+				variable : rule_false
 			}
 		],
 		skipFirstLAMBDA: true,
