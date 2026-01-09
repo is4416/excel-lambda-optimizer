@@ -3,7 +3,7 @@ Optimize pasted Excel LAMBDA formulas automatically.
 
 エクセルで実行可能となるよう、コメント削除等を行いコードを成形します
 
-[example](http://localhost:5173/excel-lambda-optimizer/)
+[example](https://is4416.github.io/excel-lambda-optimizer/)
 
 下記のような単一行のコメントを除去し、成形します  
 複数行のコメントには対応していません
